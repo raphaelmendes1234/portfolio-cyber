@@ -1,1 +1,31 @@
+# Brute-Force SSH Attack Simulation
+
+This document outlines the steps taken to simulate a brute-force SSH attack using Kali Linux against a target Linux server. The purpose of this simulation is to generate logs that Wazuh can detect and alert on, mimicking a real-world attack scenario.
+
+## Tools Used
+
+*   **Kali Linux:** Attacker machine, used to execute the brute-force attack.
+*   **Hydra:** A fast and flexible login cracker, pre-installed on Kali Linux, used to perform the brute-force attack.
+*   **Target Linux Server:** Victim machine, running an SSH service, configured to log authentication attempts.
+
+## Attack Steps
+
+1.  **Identify Target:** Determine the IP address or hostname of the target Linux server.
+2.  **Prepare Wordlist:** Create or obtain a wordlist containing common usernames and passwords. For this simulation, a small custom wordlist can be used to expedite the process and ensure detection.
+3.  **Execute Hydra Command:** From the Kali Linux machine, execute the following command (example):
+
+    ```bash
+    hydra -L users.txt -P passwords.txt ssh://<target_ip>
+    ```
+
+    *   `-L users.txt`: Specifies a file containing a list of usernames to try.
+    *   `-P passwords.txt`: Specifies a file containing a list of passwords to try.
+    *   `ssh://<target_ip>`: Specifies the target service (SSH) and its IP address.
+
+4.  **Monitor Attack:** Observe Hydra's output for successful logins (though for this simulation, we expect multiple failures to trigger alerts).
+5.  **Generate Logs:** The failed login attempts will be logged on the target Linux server, typically in `/var/log/auth.log` or `/var/log/secure`, which Wazuh will then collect.
+
+## Expected Outcome
+
+Multiple failed SSH login attempts will be recorded on the target server. These logs will be forwarded to the Wazuh SIEM, which is expected to generate an alert indicating a brute-force attack due to the high number of failed authentication attempts from a single source IP within a short timeframe.
 
