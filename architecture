@@ -1,1 +1,21 @@
+# Lab Architecture
+
+This lab environment is designed to simulate a typical SOC setup for threat detection and incident analysis. It consists of the following components:
+
+- **Attacker Machine:** Kali Linux VM (VirtualBox) used to launch the brute-force SSH attack.
+- **Victim Server:** Linux Server VM (VirtualBox) targeted by the attack, running an SSH service.
+- **SIEM/Monitoring:** Wazuh deployed on a separate VM or host, configured to collect logs from the victim server and generate alerts based on suspicious activities.
+
+## Network Diagram (Conceptual)
+
+```mermaid
+graph TD
+    A(Kali Linux Attacker) --> B(VirtualBox Network)
+    B --> C(Linux Server Victim)
+    C --> D(Wazuh SIEM)
+```
+
+**Description:**
+
+The Kali Linux machine initiates a brute-force SSH attack against the Linux Server. The Linux Server's authentication logs are forwarded to the Wazuh SIEM. Wazuh monitors these logs, detects the multiple failed login attempts, and triggers an alert. This setup allows for the simulation of an attack, its detection, and subsequent analysis within a controlled environment.
 
